@@ -36,6 +36,7 @@ jobs:
 
       - name: Run Molecule tests.
         run: molecule test
+        working_directory: "${{ GITHUB_WORKSPACE }}/jprltsnz.borgmatic"
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
