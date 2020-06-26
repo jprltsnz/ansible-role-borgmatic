@@ -1,0 +1,25 @@
+########################################################################
+# File managed by Ansible
+# Your changes will be overwritten.
+########################################################################
+[Unit]
+Description=borgmatic backup
+Wants=network-online.target
+After=network-online.target
+ConditionACPower=true
+
+[Service]
+Type=oneshot
+
+# Lower CPU and I/O priority.
+Nice=19
+CPUSchedulingPolicy=batch
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+IOWeight=100
+
+Restart=no
+
+# Delay start to prevent backups running during boot.
+ExecStartPre=/bin/sleep 1m
+ExecStart=/bin/systemd-inhibit --who="borgmatic" --why="Prevent interrupting scheduled backup" /usr/local/bin/borgmatic --syslog-verbosity 1

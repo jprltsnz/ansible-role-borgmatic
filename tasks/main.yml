@@ -1,0 +1,66 @@
+---
+- name: Include OS-specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_os_family }}.yml"
+
+- name: Run OS-specific setup
+  include: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_os_family }}.yml"
+
+- name: Install required System Packages
+  package:
+    pkg: "{{ borgmatic_role_packages }}"
+    state: present
+
+- name: Install borg and borgmatic from pip
+  pip:
+    name: "{{ borgmatic_role_python_packages }}"
+    executable: "pip3"
+
+- name: Ensures /etc/borgmatic.d exists
+  file:
+    path: /etc/borgmatic.d
+    state: directory
+    mode: 0700
+    owner: root
+
+- set_fact:
+    bormgatic_list_dicts_name_config: |
+        {% set res = [] -%}
+        {% for key, value in borgmatic_configs.items() -%}
+            {% set ignored = res.append({'name': key, 'config':value}) -%}
+        {%- endfor %}
+        {{ res }}
+
+- name: Add Borgmatic Configurations
+  template:
+    src: borgmatic_app.yml.j2
+    dest: "/etc/borgmatic.d/{{ item.name }}.yml"
+    mode: 0600
+  with_items: "{{ bormgatic_list_dicts_name_config }}"
+  notify:
+    - Init Borgmatic repos
+
+- name: install borgmatic systemd unit file
+  template:
+    src: "{{ item }}"
+    dest: /etc/systemd/system/borgmatic.service
+  with_first_found:
+    - "borgmatic-{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.service.j2"
+    - "borgmatic-{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.service.j2"
+    - "borgmatic.service.j2"
+
+- name: install borgmatic systemd timer file
+  template:
+    src: borgmatic.timer.j2
+    dest: /etc/systemd/system/borgmatic.timer
+
+- name: Make sure borgmatic timer is running
+  systemd:
+    name: borgmatic.timer
+    state: started
+    enabled: yes

@@ -1,0 +1,13 @@
+########################################################################
+# File managed by Ansible
+# Your changes will be overwritten.
+########################################################################
+[Unit]
+Description=Run borgmatic backup
+
+[Timer]
+OnCalendar={{ borgmatic_timer  }}
+Persistent=true
+
+[Install]
+WantedBy=timers.target

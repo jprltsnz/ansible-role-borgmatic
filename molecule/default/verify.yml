@@ -1,0 +1,20 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Get stat for backup_etc borg repo
+      stat:
+        path: /srv/backup_etc/README
+      register: stat_result_etc
+    - name: Get stat for backup_home borg repo
+      stat:
+        path: /srv/backup_home/README
+      register: stat_result_home
+
+    - name: Assert that the backups borg repo exists
+      assert:
+        that:
+          - stat_result_etc.stat.exists
+          - stat_result_home.stat.exists

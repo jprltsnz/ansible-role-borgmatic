@@ -1,0 +1,17 @@
+---
+borgmatic_role_packages:
+  - libacl-devel
+  - libacl
+  - gcc
+  - gcc-c++
+  - openssl-devel
+  - python36-pip
+  - python36-wheel
+  - python36-devel
+  - python-setuptools
+  - openssh-clients
+
+borgmatic_role_python_packages:
+  - cython
+  - borgbackup
+  - borgmatic

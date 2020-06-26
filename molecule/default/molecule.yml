@@ -1,0 +1,17 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: molecule-instance
+    image: geerlingguy/docker-${MOLECULE_DISTRO:-centos8}-ansible:${MOLECULE_TAG:-latest}
+    command: ""
+    volumes:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    pre_build_image: true
+    privileged: True
+provisioner:
+  name: ansible
+verifier:
+  name: ansible

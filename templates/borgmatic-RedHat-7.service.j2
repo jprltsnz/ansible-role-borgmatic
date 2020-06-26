@@ -1,0 +1,16 @@
+########################################################################
+# File managed by Ansible
+# Your changes will be overwritten.
+########################################################################
+[Unit]
+Description=borgmatic backup service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+Restart=no
+
+# Delay start to prevent backups running during boot.
+ExecStartPre=sleep 1m
+ExecStart=/usr/local/bin/borgmatic --syslog-verbosity 1

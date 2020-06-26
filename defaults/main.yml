@@ -1,0 +1,5 @@
+---
+borgmatic_init_encryption: "none"
+borgmatic_timer: "Weekly"
+
+borgmatic_configs: {}
