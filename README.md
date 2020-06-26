@@ -1,5 +1,8 @@
 BorgBackup with borgmatic Client
 =========
+![CI](https://github.com/jprltsnz/ansible-role-borgmatic/workflows/CI/badge.svg)
+
+
 Sets up borgmatic to make per-application backups with optional encryption and compression. Currently supports Debian/Ubuntu and CentOS/Red Hat.
 
 Mainly based of https://github.com/borgbase/ansible-role-borgbackup, but this role is a little more flexible and doesn't support borgbase.
