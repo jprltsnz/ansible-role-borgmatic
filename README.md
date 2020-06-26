@@ -28,7 +28,7 @@ Example Playbook
   tasks:
     - name: "Include borgmatic"
       include_role:
-        name: "borgmatic"
+        name: jprltsnz.borgmatic
       vars:
         borgmatic_configs:
           backup-etc:
